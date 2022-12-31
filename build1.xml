@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="projbanque" default="build" basedir=".">
+
+    <property name="build" value="build" />
+    <property name="bin" value="bin" />
+    <!-- <property name="setPro" value="./bin/Banque.class, Compte.class" />
+    <property name="setDev" value="./bin/**/*.class" /> -->
+    <!-- <property name="compile" location="build.xml" value="compile" /> -->
+
+    <target name="date">
+        <tstamp/>
+        <echo message="Nous sommes le ${TODAY}" />
+    </target>
+
+    <target name="init" depends="date" description="creation de repertoire build">
+        <mkdir dir="${build}"/>
+    </target>
+
+    <target name="build" depends="init, setPro, setDev">
+        <jar destfile="${build}/banque.jar" basedir="${bin}" >
+            <manifest>
+                <attribute name="dev-class" value="setDev" />
+                <attribute name="pro-class" value="setPro" />
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="setPro" if="${lib}">
+        <echo message="banque et compte ont ete pris en charge !" />
+        <fileset dir="${bin}" includes="./${bin}/Banque.class, Compte.class" />
+    </target>
+    <target name="setDev" unless="${lib}">
+        <echo message="toutes les files ont pris en charge !" />
+        <fileset dir="${bin}" includes="./${bin}/**.class" />
+    </target>
+
+    <path id="projet.classpath">
+        <fileset dir="${build}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${bin}" />
+    </path>
+
+    <target name="execution" depends="build">
+        <java classname="TestBanque" fork="true" >
+            <classpath refid="projet.classpath" />
+        </java>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}" />
+    </target>
+</project>

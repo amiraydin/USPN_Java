@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="projbanque" default="compile" basedir=".">
+
+    <!-- on peut utiliser location a la place de value -->
+    <property name="src" value="src"/>
+    <property name="bin"  value="bin"/>
+
+    <target name="prepare" description="creation de repertoire bin">
+        <tstamp/>
+        <mkdir dir="${bin}"/>
+    </target>
+
+    <target name="compile" depends="prepare" description="compile the source">
+        <echo message="compilation en cours ..." />
+        <javac srcdir="${src}"
+               destdir="${bin}"
+        />
+        <echo message="compilation finie !" />
+    </target>
+    <target name="clean">
+        <delete>
+            <fileset dir="${bin}" includes="**/*.class" />
+        </delete>
+        <delete dir="${bin}" />
+    </target>
+
+</project>
